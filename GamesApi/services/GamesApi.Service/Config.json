@@ -2,9 +2,5 @@
   "GamesApi": {
     "ConnectionString": "server=192.168.1.120;port=5433;database=gamesapi;uid=postgres;password=postgres;",
     "PageSize": 20
-  },
-  "Redis": {
-    "Host": "192.168.1.120:6380",
-    "CacheTimeout": "00:00:10"
   }
 }
