@@ -36,7 +36,7 @@ namespace GamesApi
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "GamesApi", Version = "v1" });
             });
             services.Configure<Config>(AppConfiguration);
-            var connectionString = AppConfiguration["BookApi:ConnectionString"];
+            var connectionString = AppConfiguration["GamesApi:ConnectionString"];
             services.AddDbContext<GamesDbContext>(
                 opts => opts.UseNpgsql(connectionString));
             services.AddTransient<IGameProvider, GameProvider>();
