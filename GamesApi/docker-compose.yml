@@ -1,0 +1,11 @@
+version: '3.4'
+
+services:
+  ratelimitapi.service:
+    image: gamesapiservice
+    build:
+      dockerfile: Dockerfile
+    environment:
+      GamesApi__ConnectionString: 'server=192.168.1.120;port=5433;database=gamesapi;uid=postgres;password=postgres;'
+    ports:
+      - 5002:80
