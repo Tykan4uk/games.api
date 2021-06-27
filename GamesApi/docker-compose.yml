@@ -1,7 +1,7 @@
 version: '3.4'
 
 services:
-  ratelimitapi.service:
+  games.service:
     image: gamesapiservice
     build:
       dockerfile: Dockerfile
