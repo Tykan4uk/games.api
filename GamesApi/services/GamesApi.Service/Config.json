@@ -5,5 +5,8 @@
   "Redis": {
     "Host": "192.168.1.120:6380",
     "CacheTimeout": "00:00:10"
+  },
+  "PageConfig": {
+    "PageSize": 20
   }
 }
