@@ -7,3 +7,6 @@ dotnet ef --startup-project services/GamesApi.Service migrations add InitialMigr
 
 #Update-Migration
 dotnet ef --startup-project services/GamesApi.Service database update InitialMigration --project src/GamesApi
+
+#Remove-Migration
+dotnet ef --startup-project services/GamesApi.Service migrations remove --project src/GamesApi -f
