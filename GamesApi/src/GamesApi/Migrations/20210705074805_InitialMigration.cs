@@ -18,7 +18,8 @@ namespace GamesApi.Migrations
                     Developer = table.Column<string>(type: "text", nullable: true),
                     Publisher = table.Column<string>(type: "text", nullable: true),
                     Genre = table.Column<string>(type: "text", nullable: true),
-                    Release = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
+                    Release = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    Price = table.Column<decimal>(type: "numeric", nullable: false)
                 },
                 constraints: table =>
                 {

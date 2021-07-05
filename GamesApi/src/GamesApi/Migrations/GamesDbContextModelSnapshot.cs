@@ -35,6 +35,9 @@ namespace GamesApi.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
+                    b.Property<decimal>("Price")
+                        .HasColumnType("numeric");
+
                     b.Property<string>("Publisher")
                         .HasColumnType("text");
 

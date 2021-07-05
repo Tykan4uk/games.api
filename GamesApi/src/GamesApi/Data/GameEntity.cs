@@ -10,5 +10,6 @@ namespace GamesApi.Data
         public string Publisher { get; set; }
         public string Genre { get; set; }
         public DateTime Release { get; set; }
+        public decimal Price { get; set; }
     }
 }

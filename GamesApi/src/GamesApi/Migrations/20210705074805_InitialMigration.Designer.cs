@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GamesApi.Migrations
 {
     [DbContext(typeof(GamesDbContext))]
-    [Migration("20210627134511_InitialMigration")]
+    [Migration("20210705074805_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,6 +36,9 @@ namespace GamesApi.Migrations
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("numeric");
 
                     b.Property<string>("Publisher")
                         .HasColumnType("text");
