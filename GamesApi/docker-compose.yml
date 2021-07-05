@@ -8,4 +8,4 @@ services:
     environment:
       GamesApi__ConnectionString: 'server=192.168.1.120;port=5433;database=gamesapi;uid=postgres;password=postgres;'
     ports:
-      - 5002:80
+      - 5003:80
