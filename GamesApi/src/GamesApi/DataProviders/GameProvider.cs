@@ -13,10 +13,10 @@ namespace GamesApi.DataProviders
         private readonly GamesDbContext _gamesDbContext;
         private readonly int _pageSize;
 
-        public GameProvider(GamesDbContext gamesDbContext, IOptions<GamesApiConfig> options)
+        public GameProvider(GamesDbContext gamesDbContext, IOptions<Config> options)
         {
             _gamesDbContext = gamesDbContext;
-            _pageSize = options.Value.PageSize;
+            _pageSize = options.Value.GamesApi.PageSize;
         }
 
         public async Task<IEnumerable<GameEntity>> GetByPageAsync(int page)
@@ -34,6 +34,14 @@ namespace GamesApi.DataProviders
             return await Task.Run(() =>
             {
                 return _gamesDbContext.Games.FirstOrDefault(f => f.Id == id);
+            });
+        }
+
+        public async Task<IEnumerable<GameEntity>> GetListGameByListIdAsync(HashSet<int> listId)
+        {
+            return await Task.Run(() =>
+            {
+                return _gamesDbContext.Games.Where(w => listId.Contains(w.Id));
             });
         }
 
