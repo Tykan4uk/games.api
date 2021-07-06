@@ -7,8 +7,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "services", "services", "{8E
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D828393F-0DCD-4491-A29B-415D2292245C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{DDFFF668-A2F3-4201-A45B-654993DF4B4C}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{48997282-1647-465D-B870-2974D4CF83D5}"
 	ProjectSection(SolutionItems) = preProject
 		docker-compose.yml = docker-compose.yml
@@ -20,6 +18,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GamesApi", "src\GamesApi\GamesApi.csproj", "{05EE5636-E654-4278-9AE4-8C26AE91837D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GamesApi.Service", "services\GamesApi.Service\GamesApi.Service.csproj", "{0CB4DB6D-3A1D-4831-97C6-0EDBA0ABBA72}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{DBAD70BD-F9B4-4759-8ABF-98DE6ED8C52F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GamesApi.UnitTests", "tests\GamesApi.UnitTests\GamesApi.UnitTests.csproj", "{44474B0F-6BB1-4A4B-8286-0B710FFF9E31}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +37,10 @@ Global
 		{0CB4DB6D-3A1D-4831-97C6-0EDBA0ABBA72}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0CB4DB6D-3A1D-4831-97C6-0EDBA0ABBA72}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0CB4DB6D-3A1D-4831-97C6-0EDBA0ABBA72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44474B0F-6BB1-4A4B-8286-0B710FFF9E31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44474B0F-6BB1-4A4B-8286-0B710FFF9E31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44474B0F-6BB1-4A4B-8286-0B710FFF9E31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44474B0F-6BB1-4A4B-8286-0B710FFF9E31}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -42,6 +48,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{05EE5636-E654-4278-9AE4-8C26AE91837D} = {D828393F-0DCD-4491-A29B-415D2292245C}
 		{0CB4DB6D-3A1D-4831-97C6-0EDBA0ABBA72} = {8EAB0405-3A7F-4EE5-A489-D8BE49DF9E64}
+		{44474B0F-6BB1-4A4B-8286-0B710FFF9E31} = {DBAD70BD-F9B4-4759-8ABF-98DE6ED8C52F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A6C3D83B-128D-4DB0-8622-F3EA02BC3002}
