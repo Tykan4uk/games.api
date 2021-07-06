@@ -4,6 +4,7 @@ services:
   games.service:
     image: gamesapiservice
     build:
+      context: ./
       dockerfile: Dockerfile
     environment:
       GamesApi__ConnectionString: 'server=192.168.1.120;port=5433;database=gamesapi;uid=postgres;password=postgres;'
