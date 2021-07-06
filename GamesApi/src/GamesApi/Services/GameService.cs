@@ -25,6 +25,11 @@ namespace GamesApi.Services
             return await _gameProvider.GetByIdAsync(id);
         }
 
+        public async Task<IEnumerable<GameEntity>> GetListGameByListIdAsync(HashSet<int> listId)
+        {
+            return await _gameProvider.GetListGameByListIdAsync(listId);
+        }
+
         public async Task<GameEntity> AddAsync(GameEntity game)
         {
             return await _gameProvider.AddAsync(game);
