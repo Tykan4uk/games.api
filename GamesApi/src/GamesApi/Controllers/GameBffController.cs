@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using GamesApi.Configuration;
 using GamesApi.Data;
 using GamesApi.Services.Abstractions;
@@ -37,6 +38,13 @@ namespace GamesApi.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var result = await _gameService.GetByIdAsync(id);
+            return result != null ? Ok(result) : BadRequest(result);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetListGameByListId([FromBody] HashSet<int> listId)
+        {
+            var result = await _gameService.GetListGameByListIdAsync(listId);
             return result != null ? Ok(result) : BadRequest(result);
         }
 
