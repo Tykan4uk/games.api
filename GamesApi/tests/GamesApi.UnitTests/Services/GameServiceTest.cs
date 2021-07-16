@@ -12,43 +12,57 @@ namespace GamesApi.UnitTests.Services
 {
     public class GameServiceTest
     {
-        private IGameService _gameService;
+        private readonly IGameService _gameService;
 
         private readonly Mock<IGameProvider> _gameProvider;
 
+        private readonly GameEntity _gameTest;
+
+        private List<GameEntity> _gameListTest;
+
         public GameServiceTest()
         {
-            var game = new GameEntity()
+            _gameTest = new GameEntity()
             {
                 Id = 0,
                 Name = "Name",
                 Developer = "Developer",
                 Publisher = "Publisher",
                 Genre = "Genre",
-                ReleaseDate = new DateTime(),
+                ReleaseDate = DateTime.Now,
                 Price = 1
             };
-            var gameList = new List<GameEntity>()
+
+            _gameListTest = new List<GameEntity>()
             {
-                game
+                _gameTest
             };
 
             _gameProvider = new Mock<IGameProvider>();
 
             _gameProvider.Setup(s => s.GetByPageAsync(
-                It.IsInRange<int>(0, 10, Moq.Range.Inclusive))).ReturnsAsync(gameList);
+                It.IsAny<int>())).ReturnsAsync(_gameListTest);
+
+            _gameProvider.Setup(s => s.GetByPageAsync(
+                It.IsInRange<int>(-10, -1, Moq.Range.Inclusive))).ReturnsAsync(new List<GameEntity>());
 
             _gameProvider.Setup(s => s.GetByIdAsync(
-                It.IsInRange<int>(0, 10, Moq.Range.Inclusive))).ReturnsAsync(game);
+                It.IsAny<int>())).ReturnsAsync(_gameTest);
+
+            _gameProvider.Setup(s => s.GetByIdAsync(
+                It.IsInRange<int>(-10, -1, Moq.Range.Inclusive))).ReturnsAsync(new GameEntity());
 
             _gameProvider.Setup(s => s.GetListGameByListIdAsync(
-                It.IsNotNull<HashSet<int>>())).ReturnsAsync(gameList);
+                It.IsNotNull<HashSet<int>>())).ReturnsAsync(_gameListTest);
 
             _gameProvider.Setup(s => s.AddAsync(
-                It.IsNotNull<GameEntity>())).ReturnsAsync(game);
+                It.IsNotNull<GameEntity>())).ReturnsAsync(_gameTest);
 
             _gameProvider.Setup(s => s.DeleteAsync(
-                It.IsInRange<int>(0, 10, Moq.Range.Inclusive))).ReturnsAsync(true);
+                It.IsAny<int>())).ReturnsAsync(true);
+
+            _gameProvider.Setup(s => s.DeleteAsync(
+                It.IsInRange<int>(-10, -1, Moq.Range.Inclusive))).ReturnsAsync(false);
 
             _gameProvider.Setup(s => s.UpdateAsync(
                 It.IsNotNull<GameEntity>())).ReturnsAsync(true);
@@ -66,7 +80,7 @@ namespace GamesApi.UnitTests.Services
             var result = await _gameService.GetByPageAsync(pageTest);
 
             //assert
-            result.Should().NotBeNullOrEmpty();
+            result.Should().BeSameAs(_gameListTest);
         }
         [Fact]
         public async void GetByPageAsyncTestFailed()
@@ -78,7 +92,7 @@ namespace GamesApi.UnitTests.Services
             var result = await _gameService.GetByPageAsync(pageTest);
 
             //assert
-            result.Should().BeEmpty();
+            result.Should().NotBeSameAs(_gameListTest);
         }
 
         [Fact]
@@ -91,7 +105,7 @@ namespace GamesApi.UnitTests.Services
             var result = await _gameService.GetByIdAsync(idTest);
 
             //assert
-            result.Should().BeOfType<GameEntity>();
+            result.Should().BeSameAs(_gameTest);
         }
         [Fact]
         public async void GetByIdAsyncTestFailed()
@@ -103,7 +117,7 @@ namespace GamesApi.UnitTests.Services
             var result = await _gameService.GetByIdAsync(idTest);
 
             //assert
-            result.Should().BeNull();
+            result.Should().NotBeSameAs(_gameTest);
         }
 
         [Fact]
@@ -116,7 +130,7 @@ namespace GamesApi.UnitTests.Services
             var result = await _gameService.GetListGameByListIdAsync(idListTest);
 
             //assert
-            result.Should().NotBeNullOrEmpty();
+            result.Should().BeSameAs(_gameListTest);
         }
         [Fact]
         public async void GetListGameByListIdAsyncTestFailed()
@@ -134,22 +148,12 @@ namespace GamesApi.UnitTests.Services
         public async void AddAsyncTestSuccess()
         {
             //arrange
-            var gameTest = new GameEntity()
-            {
-                Id = 0,
-                Name = "Name",
-                Developer = "Developer",
-                Publisher = "Publisher",
-                Genre = "Genre",
-                ReleaseDate = new DateTime(),
-                Price = 1
-            };
 
             //act
-            var result = await _gameService.AddAsync(gameTest);
+            var result = await _gameService.AddAsync(_gameTest);
 
             //assert
-            result.Should().BeOfType<GameEntity>();
+            result.Should().BeSameAs(_gameTest);
         }
         [Fact]
         public async void AddAsyncTestFailed()
@@ -192,19 +196,9 @@ namespace GamesApi.UnitTests.Services
         public async void UpdateAsyncTestSuccess()
         {
             //arrange
-            var gameTest = new GameEntity()
-            {
-                Id = 0,
-                Name = "Name",
-                Developer = "Developer",
-                Publisher = "Publisher",
-                Genre = "Genre",
-                ReleaseDate = new DateTime(),
-                Price = 1
-            };
 
             //act
-            var result = await _gameService.UpdateAsync(gameTest);
+            var result = await _gameService.UpdateAsync(_gameTest);
 
             //assert
             result.Should().BeTrue();
