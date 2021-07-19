@@ -1,11 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using GamesApi.Configuration;
-using GamesApi.Data;
+﻿using System.Threading.Tasks;
+using GamesApi.Models.Requests;
 using GamesApi.Services.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace GamesApi.Controllers
 {
@@ -25,16 +22,16 @@ namespace GamesApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetByPage(int page)
+        public async Task<IActionResult> GetByPage([FromBody] GetByPageRequest request)
         {
-            var result = await _gameService.GetByPageAsync(page);
+            var result = await _gameService.GetByPageAsync(request.Page, request.PageSize);
             return result != null ? Ok(result) : BadRequest(result);
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetById([FromBody] GetByIdRequest request)
         {
-            var result = await _gameService.GetByIdAsync(id);
+            var result = await _gameService.GetByIdAsync(request.Id);
             return result != null ? Ok(result) : BadRequest(result);
         }
     }

@@ -1,11 +1,8 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using GamesApi.Configuration;
-using GamesApi.Data;
+using GamesApi.Models.Requests;
 using GamesApi.Services.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace GamesApi.Controllers
 {
@@ -15,58 +12,83 @@ namespace GamesApi.Controllers
     {
         private readonly ILogger<ManageController> _logger;
         private readonly IGameService _gameService;
-        private readonly Config _config;
 
         public ManageController(
             ILogger<ManageController> logger,
-            IOptions<Config> config,
             IGameService gameService)
         {
             _logger = logger;
             _gameService = gameService;
-            _config = config.Value;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetByPage(int page)
+        public async Task<IActionResult> GetByPage([FromQuery] GetByPageRequest request)
         {
-            var result = await _gameService.GetByPageAsync(page);
+            var result = await _gameService.GetByPageAsync(request.Page, request.PageSize);
             return result != null ? Ok(result) : BadRequest(result);
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetById([FromQuery] GetByIdRequest request)
         {
-            var result = await _gameService.GetByIdAsync(id);
+            var result = await _gameService.GetByIdAsync(request.Id);
             return result != null ? Ok(result) : BadRequest(result);
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetListGameByListId([FromBody] HashSet<int> listId)
+        public async Task<IActionResult> Add([FromBody] AddRequest request)
         {
-            var result = await _gameService.GetListGameByListIdAsync(listId);
+            var result = await _gameService.AddAsync(request.Name, request.Developer, request.Publisher, request.Genre, request.ReleaseDate, request.Price);
             return result != null ? Ok(result) : BadRequest(result);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Add([FromBody] GameEntity game)
+        [HttpDelete]
+        public async Task<IActionResult> Delete([FromBody] DeleteRequest request)
         {
-            var result = await _gameService.AddAsync(game);
+            var result = await _gameService.DeleteAsync(request.Id);
             return result != null ? Ok(result) : BadRequest(result);
         }
 
         [HttpPut]
-        public async Task<IActionResult> Put([FromBody] GameEntity game)
+        public async Task<IActionResult> PutName([FromBody] PutNameRequest request)
         {
-            var result = await _gameService.UpdateAsync(game);
-            return result ? Ok(result) : BadRequest(result);
+            var result = await _gameService.UpdateNameAsync(request.Id, request.Name);
+            return result != null ? Ok(result) : BadRequest(result);
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> Delete([FromBody] int id)
+        [HttpPut]
+        public async Task<IActionResult> PutDeveloper([FromBody] PutDeveloperRequest request)
         {
-            var result = await _gameService.DeleteAsync(id);
-            return result ? Ok(result) : BadRequest(result);
+            var result = await _gameService.UpdateDeveloperAsync(request.Id, request.Developer);
+            return result != null ? Ok(result) : BadRequest(result);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> PutPublisher([FromBody] PutPublisherRequest request)
+        {
+            var result = await _gameService.UpdatePublisherAsync(request.Id, request.Publisher);
+            return result != null ? Ok(result) : BadRequest(result);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> PutGenre([FromBody] PutGenreRequest request)
+        {
+            var result = await _gameService.UpdateGenreAsync(request.Id, request.Genre);
+            return result != null ? Ok(result) : BadRequest(result);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> PutReleaseDate([FromBody] PutReleaseDateRequest request)
+        {
+            var result = await _gameService.UpdateReleaseDateAsync(request.Id, request.ReleaseDate);
+            return result != null ? Ok(result) : BadRequest(result);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> PutPrice([FromBody] PutPriceRequest request)
+        {
+            var result = await _gameService.UpdatePriceAsync(request.Id, request.Price);
+            return result != null ? Ok(result) : BadRequest(result);
         }
     }
 }
