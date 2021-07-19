@@ -15,16 +15,13 @@ namespace GamesApi.Controllers
     {
         private readonly ILogger<GameBffController> _logger;
         private readonly IGameService _gameService;
-        private readonly Config _config;
 
         public GameBffController(
             ILogger<GameBffController> logger,
-            IOptions<Config> config,
             IGameService gameService)
         {
             _logger = logger;
             _gameService = gameService;
-            _config = config.Value;
         }
 
         [HttpPost]
@@ -39,34 +36,6 @@ namespace GamesApi.Controllers
         {
             var result = await _gameService.GetByIdAsync(id);
             return result != null ? Ok(result) : BadRequest(result);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> GetListGameByListId([FromBody] HashSet<int> listId)
-        {
-            var result = await _gameService.GetListGameByListIdAsync(listId);
-            return result != null ? Ok(result) : BadRequest(result);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Add([FromBody] GameEntity game)
-        {
-            var result = await _gameService.AddAsync(game);
-            return result != null ? Ok(result) : BadRequest(result);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Put([FromBody] GameEntity game)
-        {
-            var result = await _gameService.UpdateAsync(game);
-            return result ? Ok(result) : BadRequest(result);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Delete([FromBody] int id)
-        {
-            var result = await _gameService.DeleteAsync(id);
-            return result ? Ok(result) : BadRequest(result);
         }
     }
 }
