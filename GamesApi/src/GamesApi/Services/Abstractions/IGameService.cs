@@ -1,16 +1,20 @@
-using System.Collections.Generic;
+using System;
 using System.Threading.Tasks;
-using GamesApi.Data;
+using GamesApi.Models.Responses;
 
 namespace GamesApi.Services.Abstractions
 {
     public interface IGameService
     {
-        Task<IEnumerable<GameEntity>> GetByPageAsync(int page);
-        Task<GameEntity> GetByIdAsync(int id);
-        Task<IEnumerable<GameEntity>> GetListGameByListIdAsync(HashSet<int> listId);
-        Task<GameEntity> AddAsync(GameEntity game);
-        Task<bool> DeleteAsync(int id);
-        Task<bool> UpdateAsync(GameEntity game);
+        Task<GetByPageResponse> GetByPageAsync(int page, int pageSize);
+        Task<GetByIdResponse> GetByIdAsync(string id);
+        Task<AddResponse> AddAsync(string name, string developer, string publisher, string genre, DateTime releaseDate, decimal price);
+        Task<DeleteResponse> DeleteAsync(string id);
+        Task<UpdateResponse> UpdateNameAsync(string id, string name);
+        Task<UpdateResponse> UpdateDeveloperAsync(string id, string developer);
+        Task<UpdateResponse> UpdatePublisherAsync(string id, string publisher);
+        Task<UpdateResponse> UpdateGenreAsync(string id, string genre);
+        Task<UpdateResponse> UpdateReleaseDateAsync(string id, DateTime releaseDate);
+        Task<UpdateResponse> UpdatePriceAsync(string id, decimal price);
     }
 }
