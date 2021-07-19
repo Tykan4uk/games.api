@@ -1,59 +1,58 @@
-using System.Collections.Generic;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
-using GamesApi.Configuration;
 using GamesApi.Data;
+using GamesApi.Data.Entities;
 using GamesApi.DataProviders.Abstractions;
-using Microsoft.Extensions.Options;
+using Microsoft.EntityFrameworkCore;
 
 namespace GamesApi.DataProviders
 {
     public class GameProvider : IGameProvider
     {
         private readonly GamesDbContext _gamesDbContext;
-        private readonly int _pageSize;
 
-        public GameProvider(GamesDbContext gamesDbContext, IOptions<Config> options)
+        public GameProvider(IDbContextFactory<GamesDbContext> dbContextFactory)
         {
-            _gamesDbContext = gamesDbContext;
-            _pageSize = options.Value.GamesApi.PageSize;
+            _gamesDbContext = dbContextFactory.CreateDbContext();
         }
 
-        public async Task<IEnumerable<GameEntity>> GetByPageAsync(int page)
+        public async Task<PagingDataResult> GetByPageAsync(int page, int pageSize)
         {
-            return await Task.Run(() =>
-            {
-                var skipNumber = page * _pageSize;
-                var takeNumber = _pageSize;
-                return _gamesDbContext.Games.Skip(skipNumber).Take(takeNumber);
-            });
+            var totalRecords = await _gamesDbContext.Games.CountAsync();
+            var pageData = await _gamesDbContext.Games
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return new PagingDataResult() { Games = pageData, TotalRecords = totalRecords };
         }
 
-        public async Task<GameEntity> GetByIdAsync(int id)
+        public async Task<GameEntity> GetByIdAsync(string id)
         {
-            return await Task.Run(() =>
-            {
-                return _gamesDbContext.Games.FirstOrDefault(f => f.Id == id);
-            });
+            return await _gamesDbContext.Games.FirstOrDefaultAsync(f => f.Id == id);
         }
 
-        public async Task<IEnumerable<GameEntity>> GetListGameByListIdAsync(HashSet<int> listId)
+        public async Task<GameEntity> AddAsync(string name, string developer, string publisher, string genre, DateTime releaseDate, decimal price)
         {
-            return await Task.Run(() =>
-            {
-                return _gamesDbContext.Games.Where(w => listId.Contains(w.Id));
-            });
-        }
-
-        public async Task<GameEntity> AddAsync(GameEntity game)
-        {
-            var result = await _gamesDbContext.Games.AddAsync(game);
+            var id = Guid.NewGuid().ToString();
+            var result = await _gamesDbContext.Games.AddAsync(
+                new GameEntity()
+                {
+                    Id = id,
+                    Name = name,
+                    Developer = developer,
+                    Publisher = publisher,
+                    Genre = genre,
+                    ReleaseDate = releaseDate,
+                    Price = price
+                });
             await _gamesDbContext.SaveChangesAsync();
 
             return result.Entity;
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(string id)
         {
             var result = _gamesDbContext.Games.FirstOrDefault(f => f.Id == id);
 
@@ -67,13 +66,83 @@ namespace GamesApi.DataProviders
             return false;
         }
 
-        public async Task<bool> UpdateAsync(GameEntity game)
+        public async Task<bool> UpdateNameAsync(string id, string name)
         {
-            var result = _gamesDbContext.Games.FirstOrDefault(f => f.Id == game.Id);
+            var result = _gamesDbContext.Games.FirstOrDefault(f => f.Id == id);
 
             if (result != null)
             {
-                _gamesDbContext.Games.Update(result);
+                result.Name = name;
+                await _gamesDbContext.SaveChangesAsync();
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<bool> UpdateDeveloperAsync(string id, string developer)
+        {
+            var result = _gamesDbContext.Games.FirstOrDefault(f => f.Id == id);
+
+            if (result != null)
+            {
+                result.Developer = developer;
+                await _gamesDbContext.SaveChangesAsync();
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<bool> UpdatePublisherAsync(string id, string publisher)
+        {
+            var result = _gamesDbContext.Games.FirstOrDefault(f => f.Id == id);
+
+            if (result != null)
+            {
+                result.Publisher = publisher;
+                await _gamesDbContext.SaveChangesAsync();
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<bool> UpdateGenreAsync(string id, string genre)
+        {
+            var result = _gamesDbContext.Games.FirstOrDefault(f => f.Id == id);
+
+            if (result != null)
+            {
+                result.Genre = genre;
+                await _gamesDbContext.SaveChangesAsync();
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<bool> UpdateReleaseDateAsync(string id, DateTime releaseDate)
+        {
+            var result = _gamesDbContext.Games.FirstOrDefault(f => f.Id == id);
+
+            if (result != null)
+            {
+                result.ReleaseDate = releaseDate;
+                await _gamesDbContext.SaveChangesAsync();
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<bool> UpdatePriceAsync(string id, decimal price)
+        {
+            var result = _gamesDbContext.Games.FirstOrDefault(f => f.Id == id);
+
+            if (result != null)
+            {
+                result.Price = price;
                 await _gamesDbContext.SaveChangesAsync();
                 return true;
             }
