@@ -36,7 +36,7 @@ namespace GamesApi
             });
             services.Configure<Config>(AppConfiguration);
             var connectionString = AppConfiguration["GamesApi:ConnectionString"];
-            services.AddDbContext<GamesDbContext>(
+            services.AddDbContextFactory<GamesDbContext>(
                 opts => opts.UseNpgsql(connectionString));
             services.AddTransient<IGameProvider, GameProvider>();
             services.AddTransient<IGameService, GameService>();
