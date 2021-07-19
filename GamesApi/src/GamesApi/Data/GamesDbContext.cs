@@ -1,3 +1,4 @@
+using GamesApi.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace GamesApi.Data
