@@ -36,6 +36,7 @@ namespace GamesApi.DataProviders
         public async Task<GameEntity> AddAsync(string name, string developer, string publisher, string genre, DateTime releaseDate, decimal price)
         {
             var id = Guid.NewGuid().ToString();
+            var createDate = DateTime.Now;
             var result = await _gamesDbContext.Games.AddAsync(
                 new GameEntity()
                 {
@@ -45,7 +46,8 @@ namespace GamesApi.DataProviders
                     Publisher = publisher,
                     Genre = genre,
                     ReleaseDate = releaseDate,
-                    Price = price
+                    Price = price,
+                    CreateDate = createDate
                 });
             await _gamesDbContext.SaveChangesAsync();
 
