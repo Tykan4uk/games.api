@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using GamesApi.Common.Enums;
 using GamesApi.Data;
 using GamesApi.Data.Entities;
 
@@ -7,7 +8,7 @@ namespace GamesApi.DataProviders.Abstractions
 {
     public interface IGameProvider
     {
-        Task<PagingDataResult> GetByPageAsync(int page, int pageSize);
+        Task<PagingDataResult> GetByPageAsync(int page, int pageSize, SortedTypeEnum sortedType);
         Task<GameEntity> GetByIdAsync(string id);
         Task<GameEntity> AddAsync(string name, string developer, string publisher, string genre, DateTime releaseDate, decimal price);
         Task<bool> DeleteAsync(string id);

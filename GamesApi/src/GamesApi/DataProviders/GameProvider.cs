@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using GamesApi.Common.Enums;
 using GamesApi.Data;
 using GamesApi.Data.Entities;
 using GamesApi.DataProviders.Abstractions;
@@ -17,10 +18,27 @@ namespace GamesApi.DataProviders
             _gamesDbContext = dbContextFactory.CreateDbContext();
         }
 
-        public async Task<PagingDataResult> GetByPageAsync(int page, int pageSize)
+        public async Task<PagingDataResult> GetByPageAsync(int page, int pageSize, SortedTypeEnum sortedType)
         {
+            IQueryable<GameEntity> query = _gamesDbContext.Games;
+            switch (sortedType)
+            {
+                case SortedTypeEnum.CreateDateAscending:
+                    query = query.OrderBy(o => o.CreateDate);
+                    break;
+                case SortedTypeEnum.CreateDateDescending:
+                    query = query.OrderByDescending(o => o.CreateDate);
+                    break;
+                case SortedTypeEnum.PriceAscending:
+                    query = query.OrderBy(o => o.Price);
+                    break;
+                case SortedTypeEnum.PriceDescending:
+                    query = query.OrderByDescending(o => o.Price);
+                    break;
+            }
+
             var totalRecords = await _gamesDbContext.Games.CountAsync();
-            var pageData = await _gamesDbContext.Games
+            var pageData = await query
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
