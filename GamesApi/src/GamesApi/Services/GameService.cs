@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using AutoMapper;
+using GamesApi.Common.Enums;
 using GamesApi.Data;
 using GamesApi.DataProviders.Abstractions;
 using GamesApi.Models;
@@ -25,11 +26,11 @@ namespace GamesApi.Services
             _mapper = mapper;
         }
 
-        public async Task<GetByPageResponse> GetByPageAsync(int page, int pageSize)
+        public async Task<GetByPageResponse> GetByPageAsync(int page, int pageSize, SortedTypeEnum sortedType)
         {
             return await ExecuteSafe(async () =>
             {
-                var result = await _gameProvider.GetByPageAsync(page, pageSize);
+                var result = await _gameProvider.GetByPageAsync(page, pageSize, sortedType);
 
                 return _mapper.Map<GetByPageResponse>(result);
             });

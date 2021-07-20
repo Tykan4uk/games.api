@@ -1,12 +1,13 @@
 using System;
 using System.Threading.Tasks;
+using GamesApi.Common.Enums;
 using GamesApi.Models.Responses;
 
 namespace GamesApi.Services.Abstractions
 {
     public interface IGameService
     {
-        Task<GetByPageResponse> GetByPageAsync(int page, int pageSize);
+        Task<GetByPageResponse> GetByPageAsync(int page, int pageSize, SortedTypeEnum sortedType);
         Task<GetByIdResponse> GetByIdAsync(string id);
         Task<AddResponse> AddAsync(string name, string developer, string publisher, string genre, DateTime releaseDate, decimal price);
         Task<DeleteResponse> DeleteAsync(string id);
