@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GamesApi.Services
 {
-    public class BaseDataService
+    public abstract class BaseDataService
     {
         private readonly GamesDbContext _gamesDbContext;
 
