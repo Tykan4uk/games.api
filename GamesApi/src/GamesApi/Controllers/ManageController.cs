@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using GamesApi.Models.Requests;
 using GamesApi.Services.Abstractions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -8,6 +9,7 @@ namespace GamesApi.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]/[action]")]
+    [Authorize(Policy = "ApiScope")]
     public class ManageController : ControllerBase
     {
         private readonly ILogger<ManageController> _logger;
