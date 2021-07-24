@@ -27,14 +27,28 @@ namespace GamesApi.Controllers
         public async Task<IActionResult> GetByPage([FromBody] GetByPageRequest request)
         {
             var result = await _gameService.GetByPageAsync(request.Page, request.PageSize, request.SortedType);
-            return result != null ? Ok(result) : BadRequest(result);
+
+            if (result == null)
+            {
+                _logger.LogInformation("(GameBffController/GetByPage)Null result. Bad request.");
+                return BadRequest(result);
+            }
+
+            return Ok(result);
         }
 
         [HttpPost]
         public async Task<IActionResult> GetById([FromBody] GetByIdRequest request)
         {
             var result = await _gameService.GetByIdAsync(request.Id);
-            return result != null ? Ok(result) : BadRequest(result);
+
+            if (result == null)
+            {
+                _logger.LogInformation("(GameBffController/GetById)Null result. Bad request.");
+                return BadRequest(result);
+            }
+
+            return Ok(result);
         }
     }
 }
