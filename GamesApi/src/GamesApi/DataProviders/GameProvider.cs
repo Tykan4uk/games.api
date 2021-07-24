@@ -2,24 +2,37 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using GamesApi.Common.Enums;
+using GamesApi.Common.Exceptions;
 using GamesApi.Data;
 using GamesApi.Data.Entities;
 using GamesApi.DataProviders.Abstractions;
+using GamesApi.Services.Abstractions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace GamesApi.DataProviders
 {
     public class GameProvider : IGameProvider
     {
         private readonly GamesDbContext _gamesDbContext;
+        private readonly ILogger<GameProvider> _logger;
 
-        public GameProvider(IDbContextFactory<GamesDbContext> dbContextFactory)
+        public GameProvider(
+            IDbContextWrapper<GamesDbContext> dbContextWrapper,
+            ILogger<GameProvider> logger)
         {
-            _gamesDbContext = dbContextFactory.CreateDbContext();
+            _gamesDbContext = dbContextWrapper.DbContext;
+            _logger = logger;
         }
 
         public async Task<PagingDataResult> GetByPageAsync(int page, int pageSize, SortedTypeEnum sortedType)
         {
+            if (page <= 0 || pageSize <= 0)
+            {
+                _logger.LogError("(GameProvider/GetByPageAsync)Page or page size error!");
+                throw new BusinessException("Page or page size error!");
+            }
+
             IQueryable<GameEntity> query = _gamesDbContext.Games;
             switch (sortedType)
             {
@@ -34,6 +47,9 @@ namespace GamesApi.DataProviders
                     break;
                 case SortedTypeEnum.PriceDescending:
                     query = query.OrderByDescending(o => o.Price);
+                    break;
+                default:
+                    query = query.OrderBy(o => o.CreateDate);
                     break;
             }
 
