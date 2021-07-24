@@ -7,20 +7,21 @@ using GamesApi.DataProviders.Abstractions;
 using GamesApi.Models;
 using GamesApi.Models.Responses;
 using GamesApi.Services.Abstractions;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace GamesApi.Services
 {
-    public class GameService : BaseDataService, IGameService
+    public class GameService : BaseDataService<GamesDbContext>, IGameService
     {
         private readonly IGameProvider _gameProvider;
         private readonly IMapper _mapper;
 
         public GameService(
-            IDbContextFactory<GamesDbContext> factory,
+            IDbContextWrapper<GamesDbContext> wrapper,
             IGameProvider gameProvider,
-            IMapper mapper)
-            : base(factory)
+            IMapper mapper,
+            ILogger<GameService> logger)
+            : base(wrapper, logger)
         {
             _gameProvider = gameProvider;
             _mapper = mapper;
