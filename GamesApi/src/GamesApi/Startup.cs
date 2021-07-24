@@ -68,6 +68,7 @@ namespace GamesApi
                 opts => opts.UseNpgsql(connectionString));
             services.AddTransient<IGameProvider, GameProvider>();
             services.AddTransient<IGameService, GameService>();
+            services.AddScoped<IDbContextWrapper<GamesDbContext>, DbContextWrapper<GamesDbContext>>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
