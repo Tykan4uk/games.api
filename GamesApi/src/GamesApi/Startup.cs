@@ -80,6 +80,7 @@ namespace GamesApi
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "GamesApi v1"));
             }
 
+            app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.Strict });
             app.UseRouting();
 
             app.UseAuthentication();
