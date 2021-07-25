@@ -10,7 +10,7 @@ namespace GamesApi.DataProviders.Abstractions
     {
         Task<PagingDataResult> GetByPageAsync(int page, int pageSize, SortedTypeEnum sortedType);
         Task<GameEntity> GetByIdAsync(string id);
-        Task<GameEntity> AddAsync(string name, string developer, string publisher, string genre, DateTime releaseDate, decimal price);
+        Task<GameEntity> AddAsync(string name, string developer, string publisher, string genre, DateTime releaseDate, decimal price, string ImageUrl, string Description);
         Task<bool> DeleteAsync(string id);
         Task<bool> UpdateNameAsync(string id, string name);
         Task<bool> UpdateDeveloperAsync(string id, string developer);
@@ -18,5 +18,7 @@ namespace GamesApi.DataProviders.Abstractions
         Task<bool> UpdateGenreAsync(string id, string genre);
         Task<bool> UpdateReleaseDateAsync(string id, DateTime releaseDate);
         Task<bool> UpdatePriceAsync(string id, decimal price);
+        Task<bool> UpdateImageUrlAsync(string id, string imageUrl);
+        Task<bool> UpdateDescriptionAsync(string id, string description);
     }
 }

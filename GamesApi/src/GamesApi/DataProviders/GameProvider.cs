@@ -67,7 +67,7 @@ namespace GamesApi.DataProviders
             return await _gamesDbContext.Games.FirstOrDefaultAsync(f => f.Id == id);
         }
 
-        public async Task<GameEntity> AddAsync(string name, string developer, string publisher, string genre, DateTime releaseDate, decimal price)
+        public async Task<GameEntity> AddAsync(string name, string developer, string publisher, string genre, DateTime releaseDate, decimal price, string imageUrl, string description)
         {
             var id = Guid.NewGuid().ToString();
             var createDate = DateTime.Now;
@@ -81,7 +81,9 @@ namespace GamesApi.DataProviders
                     Genre = genre,
                     ReleaseDate = releaseDate,
                     Price = price,
-                    CreateDate = createDate
+                    CreateDate = createDate,
+                    ImageUrl = imageUrl,
+                    Description = description
                 });
             await _gamesDbContext.SaveChangesAsync();
 
@@ -179,6 +181,34 @@ namespace GamesApi.DataProviders
             if (result != null)
             {
                 result.Price = price;
+                await _gamesDbContext.SaveChangesAsync();
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<bool> UpdateImageUrlAsync(string id, string imageUrl)
+        {
+            var result = _gamesDbContext.Games.FirstOrDefault(f => f.Id == id);
+
+            if (result != null)
+            {
+                result.ImageUrl = imageUrl;
+                await _gamesDbContext.SaveChangesAsync();
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<bool> UpdateDescriptionAsync(string id, string description)
+        {
+            var result = _gamesDbContext.Games.FirstOrDefault(f => f.Id == id);
+
+            if (result != null)
+            {
+                result.Description = description;
                 await _gamesDbContext.SaveChangesAsync();
                 return true;
             }
