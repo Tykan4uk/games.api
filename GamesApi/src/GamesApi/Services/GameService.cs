@@ -49,11 +49,11 @@ namespace GamesApi.Services
             });
         }
 
-        public async Task<AddResponse> AddAsync(string name, string developer, string publisher, string genre, DateTime releaseDate, decimal price)
+        public async Task<AddResponse> AddAsync(string name, string developer, string publisher, string genre, DateTime releaseDate, decimal price, string imageUrl, string description)
         {
             return await ExecuteSafe(async () =>
             {
-                var result = await _gameProvider.AddAsync(name, developer, publisher, genre, releaseDate, price);
+                var result = await _gameProvider.AddAsync(name, developer, publisher, genre, releaseDate, price, imageUrl, description);
 
                 var game = _mapper.Map<GameModel>(result);
 
@@ -126,6 +126,26 @@ namespace GamesApi.Services
             return await ExecuteSafe(async () =>
             {
                 var result = await _gameProvider.UpdatePriceAsync(id, price);
+
+                return new UpdateResponse() { IsUpdated = result };
+            });
+        }
+
+        public async Task<UpdateResponse> UpdateImageUrlAsync(string id, string imageUrl)
+        {
+            return await ExecuteSafe(async () =>
+            {
+                var result = await _gameProvider.UpdateImageUrlAsync(id, imageUrl);
+
+                return new UpdateResponse() { IsUpdated = result };
+            });
+        }
+
+        public async Task<UpdateResponse> UpdateDescriptionAsync(string id, string description)
+        {
+            return await ExecuteSafe(async () =>
+            {
+                var result = await _gameProvider.UpdateDescriptionAsync(id, description);
 
                 return new UpdateResponse() { IsUpdated = result };
             });
