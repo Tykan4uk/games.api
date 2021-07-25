@@ -54,7 +54,7 @@ namespace GamesApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] AddRequest request)
         {
-            var result = await _gameService.AddAsync(request.Name, request.Developer, request.Publisher, request.Genre, request.ReleaseDate, request.Price);
+            var result = await _gameService.AddAsync(request.Name, request.Developer, request.Publisher, request.Genre, request.ReleaseDate, request.Price, request.ImageUrl, request.Description);
 
             if (result == null)
             {
@@ -157,6 +157,34 @@ namespace GamesApi.Controllers
             if (result == null)
             {
                 _logger.LogInformation("(ManageController/PutPrice)Null result. Bad request.");
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> PutImageUrl([FromBody] PutImageUrlRequest request)
+        {
+            var result = await _gameService.UpdateImageUrlAsync(request.Id, request.ImageUrl);
+
+            if (result == null)
+            {
+                _logger.LogInformation("(ManageController/PutImageUrl)Null result. Bad request.");
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> PutDescription([FromBody] PutDescriptionRequest request)
+        {
+            var result = await _gameService.UpdateDescriptionAsync(request.Id, request.Description);
+
+            if (result == null)
+            {
+                _logger.LogInformation("(ManageController/PutDescription)Null result. Bad request.");
                 return BadRequest(result);
             }
 
