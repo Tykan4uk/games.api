@@ -85,6 +85,10 @@ namespace GamesApi.UnitTests.Services
         private readonly DateTime _testDateFailed = DateTime.MinValue;
         private readonly decimal _testPriceSuccess = 10.0M;
         private readonly decimal _testPriceFailed = 0.0M;
+        private readonly string _testImageUrlSuccess = "testImageUrlSuccess";
+        private readonly string _testImageUrlFailed = "empty";
+        private readonly string _testDescriptionSuccess = "testDescriptionSuccess";
+        private readonly string _testDescriptionFailed = "empty";
 
         public GameServiceTest()
         {
@@ -115,7 +119,9 @@ namespace GamesApi.UnitTests.Services
                 It.Is<string>(i => i.Contains(_testPublisherSuccess)),
                 It.Is<string>(i => i.Contains(_testGenreSuccess)),
                 It.Is<DateTime>(i => i.Equals(_testDateSuccess)),
-                It.Is<decimal>(i => i.Equals(_testPriceSuccess)))).ReturnsAsync(_gameEntitySuccess);
+                It.Is<decimal>(i => i.Equals(_testPriceSuccess)),
+                It.Is<string>(i => i.Contains(_testImageUrlSuccess)),
+                It.Is<string>(i => i.Contains(_testDescriptionSuccess)))).ReturnsAsync(_gameEntitySuccess);
 
             _gameProvider.Setup(s => s.AddAsync(
                 It.Is<string>(i => i.Contains(_testNameFailed)),
@@ -123,7 +129,9 @@ namespace GamesApi.UnitTests.Services
                 It.Is<string>(i => i.Contains(_testPublisherFailed)),
                 It.Is<string>(i => i.Contains(_testGenreFailed)),
                 It.Is<DateTime>(i => i.Equals(_testDateFailed)),
-                It.Is<decimal>(i => i.Equals(_testPriceFailed)))).ReturnsAsync(_gameEntityFailed);
+                It.Is<decimal>(i => i.Equals(_testPriceFailed)),
+                It.Is<string>(i => i.Contains(_testImageUrlFailed)),
+                It.Is<string>(i => i.Contains(_testDescriptionFailed)))).ReturnsAsync(_gameEntityFailed);
 
             _gameProvider.Setup(s => s.DeleteAsync(
                 It.Is<string>(i => i.Contains(_testIdSuccess)))).ReturnsAsync(true);
@@ -178,6 +186,22 @@ namespace GamesApi.UnitTests.Services
             _gameProvider.Setup(s => s.UpdatePriceAsync(
                 It.Is<string>(i => i.Contains(_testIdFailed)),
                 It.Is<decimal>(i => i.Equals(_testPriceFailed)))).ReturnsAsync(false);
+
+            _gameProvider.Setup(s => s.UpdateImageUrlAsync(
+                It.Is<string>(i => i.Contains(_testIdSuccess)),
+                It.Is<string>(i => i.Contains(_testImageUrlSuccess)))).ReturnsAsync(true);
+
+            _gameProvider.Setup(s => s.UpdateImageUrlAsync(
+                It.Is<string>(i => i.Contains(_testIdFailed)),
+                It.Is<string>(i => i.Contains(_testImageUrlFailed)))).ReturnsAsync(false);
+
+            _gameProvider.Setup(s => s.UpdateDescriptionAsync(
+                It.Is<string>(i => i.Contains(_testIdSuccess)),
+                It.Is<string>(i => i.Contains(_testDescriptionSuccess)))).ReturnsAsync(true);
+
+            _gameProvider.Setup(s => s.UpdateDescriptionAsync(
+                It.Is<string>(i => i.Contains(_testIdFailed)),
+                It.Is<string>(i => i.Contains(_testDescriptionFailed)))).ReturnsAsync(false);
 
             _mapper.Setup(s => s.Map<GameModel>(
                 It.Is<GameEntity>(i => i.Equals(_gameEntitySuccess)))).Returns(_gameModelSuccess);
@@ -265,7 +289,7 @@ namespace GamesApi.UnitTests.Services
             // arrange
 
             // act
-            var result = await _gameService.AddAsync(_testNameSuccess, _testDeveloperSuccess, _testPublisherSuccess, _testGenreSuccess, _testDateSuccess, _testPriceSuccess);
+            var result = await _gameService.AddAsync(_testNameSuccess, _testDeveloperSuccess, _testPublisherSuccess, _testGenreSuccess, _testDateSuccess, _testPriceSuccess, _testImageUrlSuccess, _testDescriptionSuccess);
 
             // assert
             result.Should().NotBeNull();
@@ -279,7 +303,7 @@ namespace GamesApi.UnitTests.Services
             // arrange
 
             // act
-            var result = await _gameService.AddAsync(_testNameFailed, _testDeveloperFailed, _testPublisherFailed, _testGenreFailed, _testDateFailed, _testPriceFailed);
+            var result = await _gameService.AddAsync(_testNameFailed, _testDeveloperFailed, _testPublisherFailed, _testGenreFailed, _testDateFailed, _testPriceFailed, _testImageUrlFailed, _testDescriptionFailed);
 
             // assert
             result.Should().NotBeNull();
@@ -463,6 +487,58 @@ namespace GamesApi.UnitTests.Services
 
             // act
             var result = await _gameService.UpdatePriceAsync(_testIdFailed, _testPriceFailed);
+
+            // assert
+            result.Should().NotBeNull();
+            result.IsUpdated.Should().Be(false);
+        }
+
+        [Fact]
+        public async Task UpdatImageUrlAsync_Success()
+        {
+            // arrange
+
+            // act
+            var result = await _gameService.UpdateImageUrlAsync(_testIdSuccess, _testImageUrlSuccess);
+
+            // assert
+            result.Should().NotBeNull();
+            result.IsUpdated.Should().Be(true);
+        }
+
+        [Fact]
+        public async Task UpdateImageUrlAsync_Failed()
+        {
+            // arrange
+
+            // act
+            var result = await _gameService.UpdateImageUrlAsync(_testIdFailed, _testImageUrlFailed);
+
+            // assert
+            result.Should().NotBeNull();
+            result.IsUpdated.Should().Be(false);
+        }
+
+        [Fact]
+        public async Task UpdatDescriptionAsync_Success()
+        {
+            // arrange
+
+            // act
+            var result = await _gameService.UpdateDescriptionAsync(_testIdSuccess, _testDescriptionSuccess);
+
+            // assert
+            result.Should().NotBeNull();
+            result.IsUpdated.Should().Be(true);
+        }
+
+        [Fact]
+        public async Task UpdateDescriptionAsync_Failed()
+        {
+            // arrange
+
+            // act
+            var result = await _gameService.UpdateDescriptionAsync(_testIdFailed, _testDescriptionFailed);
 
             // assert
             result.Should().NotBeNull();
