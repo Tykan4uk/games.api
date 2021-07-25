@@ -12,5 +12,7 @@ namespace GamesApi.Models
         public DateTime ReleaseDate { get; set; }
         public decimal Price { get; set; }
         public DateTime CreateDate { get; set; }
+        public string Description { get; set; }
+        public string ImageUrl { get; set; }
     }
 }
