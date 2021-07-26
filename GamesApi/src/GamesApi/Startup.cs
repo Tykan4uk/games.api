@@ -31,6 +31,8 @@ namespace GamesApi
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHttpClient();
+
             // accepts any access token issued by identity server
             services.AddAuthentication("Bearer")
                 .AddJwtBearer("Bearer", options =>
@@ -70,6 +72,8 @@ namespace GamesApi
             services.AddTransient<IGameProvider, GameProvider>();
             services.AddTransient<IGameService, GameService>();
             services.AddScoped<IDbContextWrapper<GamesDbContext>, DbContextWrapper<GamesDbContext>>();
+            services.AddTransient<IHttpClientService, HttpClientService>();
+            services.AddTransient<IRateLimitService, RateLimitService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
